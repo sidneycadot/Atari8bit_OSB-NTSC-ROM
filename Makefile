@@ -1,24 +1,24 @@
 
-.PHONY : clean default check check1 check2
+.PHONY : clean default check check-1 check-2
 
 default : OperatingSystemSourceListing.pdf DependencyGraph.pdf CC65Version.lst OriginalVersion.pdf CC65Version.dump OriginalVersion.dump
 
 ###############################################################################
 
-check : check1 check2
+check : check-1 check-2
 
-check1 : CC65Version.dump OriginalVersion.dump
+check-1 : CC65Version.dump OriginalVersion.dump
 	@echo "========== Compare dump files from two paths - they must be identical."
 	@if cmp -s CC65Version.dump OriginalVersion.dump ; then echo "identical -- all ok" ; else echo -e "\n***** ERROR: DUMPS NOT IDENTICAL *****\n" ; fi
 
-check2 : CC65Version.dump
+check-2 : CC65Version.dump
 	@echo "========== Check that the CC65 dump file corresponds to the ROM file ..."
 	@./CheckDumpAgainstROM.py
 
 ###############################################################################
 
 AlmostCC65Version.s : RootVersion.lst
-	./MakeVersion.py --version=cc65
+	./MakeVersion.py --version=cc65 < $< > $@
 
 CC65Version.s : AlmostCC65Version.s CC65Version.patch
 	patch -p1 AlmostCC65Version.s CC65Version.patch -o CC65Version.s
@@ -32,7 +32,7 @@ CC65Version.dump : CC65Version.lst
 ###############################################################################
 
 OriginalVersion.lst : RootVersion.lst
-	./MakeVersion.py --version=original
+	./MakeVersion.py --version=original < $< > $@
 
 OriginalVersion.dump : OriginalVersion.lst
 	./ListToDump.py --version=original
