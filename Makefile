@@ -27,7 +27,7 @@ CC65Version.o CC65Version.lst : CC65Version.s
 	ca65 --listing CC65Version.lst --list-bytes 99 CC65Version.s
 
 CC65Version.dump : CC65Version.lst
-	./ListToDump.py --version=cc65
+	./ListToDump.py --version=cc65 < $< > $@
 
 ###############################################################################
 
@@ -35,7 +35,7 @@ OriginalVersion.lst : RootVersion.lst
 	./MakeVersion.py --version=original < $< > $@
 
 OriginalVersion.dump : OriginalVersion.lst
-	./ListToDump.py --version=original
+	./ListToDump.py --version=original < $< > $@
 
 OriginalVersion.ps : OriginalVersion.lst
 	enscript --landscape --no-header --font Courier8.5 OriginalVersion.lst -o OriginalVersion.ps

@@ -1,17 +1,13 @@
 #! /usr/bin/env python
 
-import sys
-import re
+import sys, re
 
-def CC65VersionListToDump(CC65VersionFilename, CC65VersionDumpFilename):
+def CC65VersionListToDump():
 
     re_hex2 = re.compile("^[0123456789ABCDEF]{2}$")
     re_hex6 = re.compile("^[0123456789ABCDEF]{6}$")
 
-    fi = open(CC65VersionFilename)
-    fo = open(CC65VersionDumpFilename, "w")
-
-    for line in fi:
+    for line in sys.stdin:
 
         assert line[-1] == "\n"
         line = line[:-1]
@@ -24,12 +20,9 @@ def CC65VersionListToDump(CC65VersionFilename, CC65VersionDumpFilename):
                 if not re_hex2.match(byte_string):
                     break
                 byte_value = int(byte_string, 16)
-                print >> fo, "%04x %02x" % (addr + i, byte_value)
+                print "%04x %02x" % (addr + i, byte_value)
 
-    fo.close()
-    fi.close()
-
-def OriginalVersionListToDump(OriginalVersionFilename, OriginalVersionDumpFilename):
+def OriginalVersionListToDump():
 
     re_empty   = re.compile("^$")
     re_asmerr  = re.compile("^  assembly errors =   0$")
@@ -40,23 +33,13 @@ def OriginalVersionListToDump(OriginalVersionFilename, OriginalVersionDumpFilena
     re_hex2    = re.compile("^[0123456789ABCDEF]{2}$")
     re_hex4    = re.compile("^[0123456789ABCDEF]{4}$")
 
-    fi = open(OriginalVersionFilename)
-    fo = open(OriginalVersionDumpFilename, "w")
-
-    for line in fi:
+    for line in sys.stdin:
 
         assert line[-1] == "\n"
         line = line[:-1]
 
-        if re_empty.match(line):
-            pass
-        elif re_asmerr.match(line):
-            pass
-        elif re_newpage.match(line):
-            pass
-        elif re_header.match(line):
-            pass
-        elif re_newfile.match(line):
+        if re_empty.match(line) or re_asmerr.match(line) or re_newpage.match(line) or re_header.match(line) or re_newfile.match(line):
+            # Ignore these lines.
             pass
         else:
             addr_string = line[10:14]
@@ -67,17 +50,22 @@ def OriginalVersionListToDump(OriginalVersionFilename, OriginalVersionDumpFilena
                     if not re_hex2.match(byte_string):
                         break
                     byte_value = int(byte_string, 16)
-                    print >> fo, "%04x %02x" % (addr + i, byte_value)
-
-    fo.close()
-    fi.close()
+                    print "%04x %02x" % (addr + i, byte_value)
 
 def main():
+
     assert len(sys.argv) == 2
-    if sys.argv[1] == "--version=cc65":
-        CC65VersionListToDump("CC65Version.lst", "CC65Version.dump")
-    elif sys.argv[1] == "--version=original":
-        OriginalVersionListToDump("OriginalVersion.lst", "OriginalVersion.dump")
+
+    assert sys.argv[1].startswith("--version=")
+
+    version = sys.argv[1][10:]
+
+    assert version in ["cc65", "original"]
+
+    if version == "cc65":
+        CC65VersionListToDump()
+    elif version == "original":
+        OriginalVersionListToDump()
 
 if __name__ == "__main__":
     main()
