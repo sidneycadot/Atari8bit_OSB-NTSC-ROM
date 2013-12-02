@@ -21,7 +21,7 @@ def CC65VersionListToDump():
                     break
                 byte_value = int(byte_string, 16)
                 print "%04x %02x" % (addr + i, byte_value)
-
+    
 def OriginalVersionListToDump():
 
     re_empty   = re.compile("^$")
