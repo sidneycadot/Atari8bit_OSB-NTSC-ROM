@@ -1,3 +1,66 @@
+This repository contains the source code for the OSB NTSC ROM for the Atari 400 and 800 machines,
+as obtained from scanning, OCRing, and proofreading a paper version of the Operating System Source
+Listing as published by Atari.
 
-This repository will hold the work I did related to reverse-engineering
-the ROMs of the Atari 8-bit computers.
+Files:
+
+* atariosb-ntsc.rom
+
+  This is the 10 Kb ROM image of the OSB ROMS. It consists of:
+
+    - Floating Point routines   $D800 .. $DFFF   (2 kilobytes)
+    - Character Set             $E000 .. $E3FF   (1 kilobyte)
+    - Operating System          $E400 .. $FFFF   (7 kilobytes)
+
+  The Operating System ROM listing covers the 7 KB of Operating System code.
+
+* RootVersion.lst
+
+  This is an annotated version of the Operating System Source List, that has also been converted
+  to lowercase.
+  
+  It contains two directives not found in the original Operating System Source List:
+
+  \newfile -- indicates that the listing changes to a new file.
+  \newpage -- indicates that the listing skips to a new page.
+
+* MakeVersion.py
+
+  This script reads the "RootVersion.lst" file, and converts it to one of two representations,
+  depending on the command line argument given:
+  
+  MakeVersion.py --version=original
+  
+    Read RootVersion.lst, convert all characters convert both the \newpage and \newfile directives
+    to form feed (\f) characters, and convert everything to uppercase.
+    
+    The result is written to "OriginalVersion.lst" and should be identical to the paper version
+    as listed in the Operating System Source Listing.
+
+  MakeVersion.py --version=cc65
+
+    Read RootVersion.lst and make the following changes:
+    
+      - empty lines, the trailing "assembly errors" line, lines containing the \newfile and
+        \newpage headers, and the per-page header lines are discarded;
+      - the ".page" and ".title" directives are commented out;
+      - the "*=" directive is replaced with a corresponding ".org" directive;
+
+    The goal of these changes is to generate a version that is very close to something that can be assembled
+    by the "ca65" assembler that is part of the "cc65" compiler suite.
+
+    The result is written to a file called "AlmostCC65Version.s".
+    
+    Note that this version can almost, but not quite, be assembled by the ca65 assembler.
+    The remaining (manual) changes needed are handled by providing a patch (see CC65Version.lst, below).
+
+* CC65Version.patch
+
+  This is a patch that, when applied to "AlmostCC65Version.s", produces "CC65Version.s", that can
+  be assembled by the ca65 assembler.
+  
+  Changes include fixes for minor syntactic issues, and a change of the "boot?" symbol to "bootq".
+
+* MakeVersion.py
+
+-- Sidney Cadot
