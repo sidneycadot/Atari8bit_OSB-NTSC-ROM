@@ -1,0 +1,73 @@
+digraph G {
+
+    subgraph "cluster1"
+    {
+        {
+            rank = same;
+            patch              [label="patch", shape=ellipse, style=filled, fillcolor="#ccccff"];
+            CC65VersionPatch   [label="CC65Version.patch", shape=note, style=filled, fillcolor="#ccffff"];
+
+            CC65VersionPatch -> patch;
+        }
+        color = none
+    }
+
+    subgraph "cluster2" {
+        {
+            rank = same;
+            CheckDumpAgainstROM [label="CheckDumpAgainstROM.py\n(should be compatible)", shape=ellipse, style=filled, fillcolor="#ffccff"];
+            AtariOSBNTSCROM     [label="atariosb-ntsc.rom", shape=note, style=filled, fillcolor="#99ffff"];
+
+            AtariOSBNTSCROM -> CheckDumpAgainstROM;
+        }
+        color = none
+    }
+
+    {
+        rank = same;
+        ListToDumpCC65     [label="ListToDump.py --version=cc65", shape=ellipse, style=filled, fillcolor="#ffccff"];
+        ListToDumpOriginal [label="ListToDump.py --version=original" shape=ellipse, style=filled, fillcolor="#ffccff"];
+    }
+
+    {
+        rank = same;
+        MakeVersionCC65     [label="MakeVersion.py --version=cc65", shape=ellipse, style=filled, fillcolor="#ffccff"];
+        MakeVersionOriginal [label="MakeVersion.py --version=original", shape=ellipse, style=filled, fillcolor="#ffccff"];
+    }
+
+    {
+        rank = same;
+        CC65VersionLST     [label="CC65Version.lst"     , shape=note, style=filled, fillcolor="#ffffcc"];
+        OriginalVersionLST [label="OriginalVersion.lst" , shape=note, style=filled, fillcolor="#ffffcc"];
+    }
+
+    RootVersionLST             [label="RootVersion.lst"      , shape=note, style=filled, fillcolor="#ccffff"];
+    AlmostCC65VersionS         [label="AlmostCC65Version.s"  , shape=note, style=filled, fillcolor="#ffffcc"];
+    CC65VersionS               [label="CC65Version.s"        , shape=note, style=filled, fillcolor="#ffffcc"];
+    CC65VersionO               [label="CC65Version.o"        , shape=note, style=filled, fillcolor="#eeeeee"];
+    CC65VersionDUMP            [label="CC65Version.dump"     , shape=note, style=filled, fillcolor="#ffffcc"];
+    OriginalVersionDUMP        [label="OriginalVersion.dump" , shape=note, style=filled, fillcolor="#ffffcc"];
+    OriginalVersionPS          [label="OriginalVersion.ps"   , shape=note, style=filled, fillcolor="#ffffcc"];
+    OriginalVersionPDF         [label="OriginalVersion.pdf"  , shape=note, style=filled, fillcolor="#ffffcc"];
+
+    cmp      [label="cmp\n(should be identical)", shape=ellipse, style=filled, fillcolor="#ccccff"];
+    ca65     [label="ca65"     shape=ellipse, style=filled, fillcolor="#ccccff"];
+    ps2pdf   [label="ps2pdf"   shape=ellipse, style=filled, fillcolor="#ccccff"];
+    enscript [label="enscript" shape=ellipse, style=filled, fillcolor="#ccccff"];
+
+
+    RootVersionLST -> MakeVersionCC65 -> AlmostCC65VersionS -> patch -> CC65VersionS -> ca65;
+
+    ca65 -> CC65VersionO;
+
+    ca65 -> CC65VersionLST -> ListToDumpCC65 -> CC65VersionDUMP;
+
+    RootVersionLST -> MakeVersionOriginal -> OriginalVersionLST -> ListToDumpOriginal -> OriginalVersionDUMP;
+
+    CC65VersionDUMP     -> cmp;
+    OriginalVersionDUMP -> cmp;
+
+    CC65VersionDUMP     -> CheckDumpAgainstROM;
+
+    OriginalVersionLST  -> enscript -> OriginalVersionPS -> ps2pdf -> OriginalVersionPDF;
+};

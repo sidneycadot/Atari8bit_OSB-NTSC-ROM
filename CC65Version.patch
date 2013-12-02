@@ -1,0 +1,256 @@
+--- AlmostCC65Version.s	2013-12-01 19:16:09.804428339 +0100
++++ CC65Version.s	2013-12-01 19:16:52.728453803 +0100
+@@ -1,4 +1,4 @@
+- list x
++;list x
+ ; This is the modified september atari 400/800 computer operating
+ ; system listing, modified to assemble on the microtec cross
+ ; assembler.
+@@ -117,13 +117,13 @@
+ insclr  =       $20         ;open without clearing screen (E,S)
+ ;
+ ; device names
+-scredt  =       'E          ;screen editor (R/W)
+-kbd     =       'K          ;keyboard (R only)
+-disply  =       'S          ;screen display (R/W)
+-printr  =       'P          ;printer (W only)
+-casset  =       'C          ;cassette
+-modem   =       'M          ;modem
+-disk    =       'D          ;disk (R/W)
++scredt  =       'E'         ;screen editor (R/W)
++kbd     =       'K'         ;keyboard (R only)
++disply  =       'S'         ;screen display (R/W)
++printr  =       'P'         ;printer (W only)
++casset  =       'C'         ;cassette
++modem   =       'M'         ;modem
++disk    =       'D'         ;disk (R/W)
+ ;
+ ; system EOL (carriage return)
+ CR      =       $9b
+@@ -173,7 +173,7 @@
+ ;
+ ; cleared on coldstart only
+ warmst: .res    1           ;warm start flag
+-boot?:  .res    1           ;successful boot flag
++bootq:  .res    1           ;successful boot flag
+ dosvec: .res    2           ;disk software start vector
+ dosini: .res    2           ;disk software init address
+ appmhi: .res    2           ;applications memory hi limit
+@@ -758,10 +758,10 @@
+ ;
+ ; .page
+ ;       .page
+-        list    s
++;       list    s
+ ;       .title  'central input/output (CIO) 2-7-79'
+ ;               updated by Al Miller 3-9-79
+-asczer  =       '0          ;ascii zero
++asczer  =       '0'         ;ascii zero
+ colon   =       $3a         ;ascii colon
+ EOL     =       $9b         ;end of record
+ ;       .page
+@@ -1344,7 +1344,7 @@
+         tax
+         bit     pactl       ;proceed ***i guess***
+         bpl     syirq9
+-        lda     porta       clear int status bit
++        lda     porta       ;clear int status bit
+         jmp     (vprced)
+ syirq9: bit     pbctl       ;interrupt ***i guess***
+         bpl     syirqa
+@@ -1613,26 +1613,26 @@
+ ;
+ ;bus commands
+ ;
+-read    =       'R
+-write   =       'W
++read    =       'R'
++write   =       'W'
+ ;statis = 'S
+ ;format = '!
+ ;
+ ;
+ ; command aux bytes
+ ;
+-sidway  =       'S          ;print 16 characters sideways
+-normal  =       'N          ;print 40 characters normally
+-double  =       'D          ;print 20 characters double wide
+-plot    =       'P          ;plot mode
++sidway  =       'S'         ;print 16 characters sideways
++normal  =       'N'         ;print 40 characters normally
++double  =       'D'         ;print 20 characters double wide
++plot    =       'P'         ;plot mode
+ ;
+ ;
+ ; bus responses
+ ;
+-ack     =       'A          ;device acknowledges information
+-nack    =       'N          ;device did not understand
+-complt  =       'C          ;device successfully completed operation
+-error   =       'E          ;device incurred an error in an attempted op
++ack     =       'A'         ;device acknowledges information
++nack    =       'N'         ;device did not understand
++complt  =       'C'         ;device successfully completed operation
++error   =       'E'         ;device incurred an error in an attempted op
+ ;
+ ;
+ ; miscellaneous equates
+@@ -1863,7 +1863,7 @@
+         sta     critic
+         ldy     status      ;return status in Y
+         sty     dstats      ;and the DCB status word
+-        rts     return
++        rts                 ;return
+ ;
+ ;
+ ;
+@@ -2486,7 +2486,7 @@
+         adc     #$9c
+         .endif
+         .if     PALFLG-1
+-        lda     #-$83
++        lda     #$100-$83
+ hitimr: clc
+         adc     #$83        ;accumulate multiplication
+         .endif
+@@ -2505,7 +2505,7 @@
+         tya                 ;restore accum
+         and     #7
+         tay                 ;pull off 3 lo bits of interval
+-        lda     #-11
++        lda     #$100-11
+ dointp: clc
+         adc     #11         ;accumulate interpolation constant
+         dey
+@@ -3238,7 +3238,7 @@
+         inc     bptr        ;bump pointer
+         ldy     #succes     ;ok status
+ gbx:    rts
+-rblok:  lda     #'R         ;read opcode
++rblok:  lda     #'R'        ;read opcode
+         jsr     siosb       ;SIO on sys buf
+         tya
+         bmi     gbx         ;if SIO errors, return
+@@ -3375,7 +3375,7 @@
+         sta     dtimlo
+         lda     dcomnd      ;get command back
+         ldy     #srsta      ;SIO read status command
+-        cmp     #'R
++        cmp     #'R'
+         beq     *+4
+         ldy     #swsta      ;SIO write status command
+         sty     dstats      ;set status for SIO
+@@ -3390,9 +3390,9 @@
+         lda     #$55
+         sta     casbuf+0
+         sta     casbuf+1
+-        lda     #'W ;write
++        lda     #'W'        ;write
+         jsr     siosb       ;call SIO on system buffer
+-        rts     and         ;return
++        rts                 ;and return
+ crntp6  =*
+         .org    $14
+ casspr: .byte   monorg-crntp6 ;^gcascv is too long
+@@ -3524,7 +3524,7 @@
+ ;       ***** print messages *****
+ ;
+ ;
+-ident:  .byte   CLS,'ATARI COMPUTER - MEMO PAD',CR
++ident:  .byte   CLS,"ATARI COMPUTER - MEMO PAD",CR
+ 
+ 
+ 
+@@ -3536,7 +3536,7 @@
+ identl  =       (-256)*identh+ident ;system i.d. msg pointer
+ ;
+ tbllen  =       ident-tblent-1 ;handler table length
+-derr5:  .byte   'BOOT ERROR',CR
++derr5:  .byte   "BOOT ERROR",CR
+ 
+ 
+ ;
+@@ -3548,7 +3548,7 @@
+ ;
+ ;       device/filename specifications
+ ;
+-opnedt: .byte   'E:',CR ;"open screen editor" device spec.
++opnedt: .byte   "E:",CR ;"open screen editor" device spec.
+ ;
+ opnh    =       opnedt/256
+ opnl    =(-256)*opnh+opnedt ;screen editor open pointer
+@@ -3829,9 +3829,9 @@
+ ;       O.S. RAM setup
+ ;
+ osram:  dec     brkkey      ;turn off break key flag
+-        lda     #.low.brkky2
++        lda     #<brkky2
+         sta     brkky
+-        lda     #.high.brkky2
++        lda     #>brkky2
+         sta     brkky+1
+         lda     tramsz      ;read RAM size in temp. reg.
+         sta     ramsiz      ;save it in RAM size.
+@@ -3861,7 +3861,7 @@
+ ;
+ boot:   lda     warmst
+         beq     nowarm      ;warm start?
+-        lda     boot?       ;yes,
++        lda     bootq       ;yes,
+         and     #1
+         beq     noinit      ;valid boot?
+         jsr     dini        ;yes, re-init. DOS software
+@@ -3928,7 +3928,7 @@
+ xboot:  jsr     bload       ;go execute boot loader
+         bcs     baddsk      ;if bad boot, do it over again
+         jsr     dini        ;go init. software
+-        inc     boot?       ;show boot success
++        inc     bootq       ;show boot success
+         rts
+ bload:  clc
+         lda     bootad
+@@ -3988,7 +3988,7 @@
+ ;
+ csboot: lda     warmst      ;warmstart?
+         beq     csbot2      ;no
+-        lda     boot?       ;get boot flag
++        lda     bootq       ;get boot flag
+         and     #2          ;was cassette boot succesfull?
+         beq     nocsb2      ;no
+         jsr     cini        ;yes, init cassette software
+@@ -4004,7 +4004,7 @@
+         lda     #0
+         sta     cassbt      ;reset cassette boot flag
+         sta     ckey        ;clear key flag
+-        asl     boot?       ;shift boot flag (now=2 if success)
++        asl     bootq       ;shift boot flag (now=2 if success)
+         lda     dosini
+         sta     casini      ;move init address for cassette
+         lda     dosini+1
+@@ -4390,7 +4390,7 @@
+         lda     colcrs
+         sta     bufstr+1
+ egetc1: jsr     kgetch ;let's fill our buffer
+-        sty     dstat       save keyboard status
++        sty     dstat       ;save keyboard status
+         lda     atachr      ;test for CR
+         cmp     #CR
+         beq     egetc2
+@@ -4526,7 +4526,7 @@
+         lda     atachr
+         eor     invflg
+ k8:     sta     atachr
+-k4:     jmp     retur1      all done
++k4:     jmp     retur1      ;all done
+ ;
+ ;
+ ;       .page
+@@ -5090,7 +5090,7 @@
+ ;
+ movlin: lda     #linbuf/256 ;set up adress=linbuf=$247
+         sta     adress+1
+-        lda     #linbuf.and.$ff
++        lda     #<linbuf
+         sta     adress
+         ldy     #39
+ movli1: lda     (toadr),y   ;save to data
