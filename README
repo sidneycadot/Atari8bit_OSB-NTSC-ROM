@@ -9,8 +9,8 @@ This repository contains the source code for the OSB NTSC ROM for the Atari 400 
 as obtained from scanning, OCRing, and proofreading a paper version of the Operating System Source
 Listing as published by Atari.
 
-File Description
-----------------
+Description of files
+--------------------
 
 * README
 
@@ -57,11 +57,11 @@ File Description
 
     Make the following changes:
 
-      - Discard the first 33 characters from each lione.
-      - empty lines, the trailing "assembly errors" line, lines containing the \newfile and
+      - The first 33 characters from each line are discarded;
+      - Empty lines, the trailing "assembly errors" line, lines containing the \newfile and
         \newpage headers, and the per-page header lines are discarded;
-      - the ".page" and ".title" directives are commented out;
-      - the "*=" directive is replaced with a corresponding ".org" directive;
+      - The ".page" and ".title" directives are commented out;
+      - The "*=" directive is replaced with a corresponding ".org" directive.
 
     The goal of these changes is to generate a version that is very close to something that can
     be assembled by the "ca65" assembler that is part of the "cc65" compiler suite.
@@ -93,3 +93,12 @@ File Description
 * OperatingSystemSourceListing.tex
 
   TBD
+
+Addendum (February 25, 2017)
+----------------------------
+
+Related work can be found here:
+
+http://www.wudsn.com/productions/atari800/atariromchecker/help/AtariROMChecker.html
+
+http://atariage.com/forums/topic/201133-os-source-code-all-revisions/#entry2667627

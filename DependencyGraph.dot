@@ -70,4 +70,4 @@ digraph G {
     CC65VersionDUMP     -> CheckDumpAgainstROM;
 
     OriginalVersionLST  -> enscript -> OriginalVersionPS -> ps2pdf -> OriginalVersionPDF;
-};
+}
