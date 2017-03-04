@@ -1,12 +1,17 @@
 AlmostCC65Version.s
+
 CC65Version.dump
 CC65Version.lst
 CC65Version.o
 CC65Version.s
+
 DependencyGraph.pdf
+DependencyGraph-hires.png
+
 OperatingSystemSourceListing.aux
 OperatingSystemSourceListing.log
 OperatingSystemSourceListing.pdf
+
 OriginalVersion.dump
 OriginalVersion.lst
 OriginalVersion.pdf
