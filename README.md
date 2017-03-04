@@ -1,13 +1,17 @@
 
-README
-======
-
-Sidney Cadot / December 3, 2013
--------------------------------
+Atari 8-bit OSB NTSC ROM
+========================
 
 This repository contains the source code for the OSB NTSC ROM for the Atari 400 and 800 machines,
 as obtained from scanning, OCRing, and proofreading a paper version of the Operating System Source
 Listing as published by Atari.
+
+Data Flow
+---------
+
+The data flow of processing the source file to the final products is shown below:
+
+![dependency graph](DependencyGraph.png "Dependency Graph")
 
 Description of files
 --------------------
@@ -94,10 +98,8 @@ Description of files
 
   TBD
 
-Addendum (February 25, 2017)
-----------------------------
-
-Related work can be found here:
+Related work
+------------
 
 http://www.wudsn.com/productions/atari800/atariromchecker/help/AtariROMChecker.html
 

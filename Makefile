@@ -1,7 +1,7 @@
 
 .PHONY : clean default check check-1 check-2
 
-default : OperatingSystemSourceListing.pdf DependencyGraph.pdf CC65Version.lst OriginalVersion.pdf CC65Version.dump OriginalVersion.dump
+default : OperatingSystemSourceListing.pdf DependencyGraph.pdf DependencyGraph.png CC65Version.lst OriginalVersion.pdf CC65Version.dump OriginalVersion.dump
 
 ###############################################################################
 
@@ -45,6 +45,12 @@ OriginalVersion.pdf : OriginalVersion.ps
 
 ###############################################################################
 
+DependencyGraph-hires.png : DependencyGraph.dot
+	dot -Tpng -Gdpi=300 DependencyGraph.dot -o DependencyGraph-hires.png
+
+DependencyGraph.png : DependencyGraph-hires.png
+	convert -resize 25% DependencyGraph-hires.png DependencyGraph.png
+
 DependencyGraph.pdf : DependencyGraph.dot
 	dot -Tpdf DependencyGraph.dot -o DependencyGraph.pdf
 
@@ -56,6 +62,6 @@ OperatingSystemSourceListing.pdf OperatingSystemSourceListing.aux OperatingSyste
 
 clean :
 	${RM} *~
-	${RM} OperatingSystemSourceListing.pdf OperatingSystemSourceListing.aux OperatingSystemSourceListing.log DependencyGraph.pdf
+	${RM} OperatingSystemSourceListing.pdf OperatingSystemSourceListing.aux OperatingSystemSourceListing.log DependencyGraph.pdf DependencyGraph-hires.png
 	${RM} OriginalVersion.lst OriginalVersion.dump OriginalVersion.ps OriginalVersion.pdf
 	${RM} AlmostCC65Version.s CC65Version.s CC65Version.o CC65Version.bin CC65Version.lst CC65Version.dump
