@@ -47,8 +47,8 @@ Description of files
 
   MakeVersion.py --version=original
 
-    Convert all characters convert both the \newpage and \newfile directives to form feed (\f)
-    characters, and convert everything to uppercase.
+    Convert the \newpage and \newfile directives to form feed (\f) characters, and convert
+    everything to uppercase.
 
     The result is written to stdout. The Makefile redirects this to "OriginalVersion.lst", which
     should be identical to the paper version as listed in the Operating System Source Listing.
@@ -69,7 +69,7 @@ Description of files
     The result is written to stdout. The Makefile redirects this to "AlmostCC65Version.s".
 
     Note that this version can almost, but not quite, be assembled by the ca65 assembler.
-    The remaining (manual) changes needed are handled by providing a patch (see CC65Version.lst, below).
+    The required changes that remain are handled by providing a patch (see CC65Version.lst, below).
 
 * CC65Version.patch
 
