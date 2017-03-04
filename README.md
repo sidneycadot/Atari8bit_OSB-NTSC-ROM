@@ -16,14 +16,6 @@ The data flow of processing the source file to the final products is shown below
 Description of files
 --------------------
 
-* README
-
-  This file.
-
-* Makefile
-
-  TBD
-
 * atariosb-ntsc.rom
 
   This is the 10 Kb ROM image of the OSB ROMS. It consists of:
@@ -36,7 +28,7 @@ Description of files
 
 * RootVersion.lst
 
-  This is an annotated version of the Operating System Source List, that has also been converted
+  This is an annotated version of the Operating System Source List that has also been converted
   to lowercase.
 
   It contains two directives not found in the original Operating System Source List:
@@ -49,23 +41,23 @@ Description of files
   This script reads the "RootVersion.lst" file (assumed to be available on stdin), and converts
   it to one of two representations, depending on the command line argument given:
 
-  MakeVersion.py --version=original
+  **MakeVersion.py --version=original**
 
-    Convert the \newpage and \newfile directives to form feed (\f) characters, and convert
-    everything to uppercase.
+  Convert the \newpage and \newfile directives to form feed (\f) characters, and convert
+  everything to uppercase.
 
-    The result is written to stdout. The Makefile redirects this to "OriginalVersion.lst", which
-    should be identical to the paper version as listed in the Operating System Source Listing.
+  The result is written to stdout. The Makefile redirects this to "OriginalVersion.lst", which
+  should be identical to the paper version as listed in the Operating System Source Listing.
 
-  MakeVersion.py --version=cc65
+  **MakeVersion.py --version=cc65**
 
-    Make the following changes:
+  Make the following changes:
 
-      - The first 33 characters from each line are discarded;
-      - Empty lines, the trailing "assembly errors" line, lines containing the \newfile and
-        \newpage headers, and the per-page header lines are discarded;
-      - The ".page" and ".title" directives are commented out;
-      - The "*=" directive is replaced with a corresponding ".org" directive.
+  - The first 33 characters from each line are discarded;
+  - Empty lines, the trailing "assembly errors" line, lines containing the \newfile and
+    \newpage headers, and the per-page header lines are discarded;
+  - The ".page" and ".title" directives are commented out;
+  - The "*=" directive is replaced with a corresponding ".org" directive.
 
     The goal of these changes is to generate a version that is very close to something that can
     be assembled by the "ca65" assembler that is part of the "cc65" compiler suite.
